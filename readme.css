@@ -1,0 +1,52 @@
+body {
+	font-size: 150%;
+	line-height:1.5;
+    background-color:black;
+	background-image:linear-gradient(to bottom right, purple, white);
+    background-repeat: no-repeat;
+	letter-spacing: 3px;
+    text-align:left; 
+    color: #4d0026;
+	margin:2px;
+	padding-left:5%;
+	padding-bottom:5%;
+	padding-right:5%;
+}
+.title{
+	font-family:'Cherry Swash';
+	color: pink;
+	font-weight:bolder;
+	text-shadow:3px 3px 3px;
+	font-size:400%;
+	
+}
+
+body{
+	font-family: 'Cherry Swash';
+}
+h1,h2,h3,h4,h5
+{
+	text-align:center;
+	font-size:200%;
+}
+
+.utilizatori{
+color: pink;
+text-shadow:2px 2px 2px;
+}
+
+.def{
+	color:green;
+}
+
+.maybe{
+	color:yellow;
+}
+
+.not{
+	color:red;
+}
+mark{
+	font-weight:bold;
+	background: none;
+}
