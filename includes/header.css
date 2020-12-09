@@ -23,22 +23,58 @@ header .overlay{
 
 h1 {
 	font-family: 'Dancing Script', cursive;
-	font-size: 100px;
+	font-size: 110px;
 	margin-bottom: 30px;
 	font-weight: bold;
 }
 
 .header_link {
+    font-size: 110%;
+    text-align: center;
 	border: none;
 	outline: none;
 	padding: 20px 20px;
 	border-radius: 100px;
 	color: #333;
-	background: #fff;
 	margin-bottom: 50px;
+    /*margin-top: 50px;
+    margin-left: 50px;
+    margin-right: 50px;*/
+
 	box-shadow: 0 3px 20px 0 #0000003b;
+    background:  #FFF;
+    position: relative;
+    display: inline-block;
 }
 .header_link:hover{
+	cursor: pointer;
+	color: #9f05ff69;
+}
+
+.profile{
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+button{
+     font-size: 110%;
+    text-align: center;
+	border: none;
+	outline: none;
+	padding: 20px 20px;
+	border-radius: 100px;
+	color: #333;
+    box-shadow: 0 3px 20px 0 #0000003b;
+    background:  #FFF;
+    position: relative;
+    display: inline-block;
+    
+}
+
+button:hover{
 	cursor: pointer;
 	color: #9f05ff69;
 }
