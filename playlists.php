@@ -40,7 +40,11 @@ else {
 	<link href='https://fonts.googleapis.com/css?family=Cherry Swash' rel='stylesheet'><title> Musaic Magazine </title>
     <link href='https://fonts.googleapis.com/css?family=Emblema One' rel='stylesheet'>
 	<link rel="stylesheet" type="text/css" href="home.css">
-	
+<style>
+.plst{
+    margin-left:auto;
+}
+</style>	
 	
 
 </head>
@@ -50,7 +54,8 @@ else {
         include('includes/header-logged.php');
     ?>
 	</header>
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=PLDisKgcnAC4RosDaKczvXfalXuCwZTp6_" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <iframe class ="plst" width="628" height="330" src="https://www.youtube.com/embed/videoseries?list=PLDisKgcnAC4RosDaKczvXfalXuCwZTp6_" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <iframe class ="plst" width="629" height="330" src="https://www.youtube.com/embed/videoseries?list=PLQlc99hV-nkGWDaG-gJxwOfqp8jxyHaaQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     <form action="/action_page.php">
     <label for="homepage">Add your playlist:</label>
     <input type="url" id="homepage" name="url"><br><br>
