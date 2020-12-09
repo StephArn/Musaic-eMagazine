@@ -1,3 +1,15 @@
+<?php
+session_start();
+ 
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: login.php");
+    exit;
+} 
+if($_SESSION['agent'] != $_SERVER['HTTP_USER_AGENT']) {
+    die('Session MAY have been hijacked');
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en-US">
 
@@ -12,20 +24,22 @@
     <link href='https://fonts.googleapis.com/css?family=Emblema One' rel='stylesheet'>
 	<link rel="stylesheet" type="text/css" href="home-logged.css">
 
+</head>
 <body>
 	
 
-</head>
+
 <body>
 <header>
 	<?php
         include('includes/header-logged.php');
     ?>
 	</header>
-	
-	<button ><a href="reset-password.php">Reset your password</a></button>
-    <button ><a href="logout.php">Logout</a></button>
-	<button ><a href="acc-details.php">Account Details</a></button>
+	<div class="profile">
+	<a href="reset-password.php"><button>Reset your password</button></a>
+    <a href="logout.php"><button>Logout</button></a>
+	<a  href="acc-details.php"><button>Account Details</button></a>
+    </div>
 
 <?php
         include('includes/footer.php');
