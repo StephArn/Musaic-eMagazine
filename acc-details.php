@@ -5,6 +5,10 @@ if (!isset($_SESSION['username'])) {
     header('location: login.php');
 
 }
+
+if($_SESSION['agent'] != $_SERVER['HTTP_USER_AGENT']) {
+    die('Session MAY have been hijacked');
+}
 ?>
 
 <!DOCTYPE html>
@@ -65,17 +69,19 @@ if (!isset($_SESSION['username'])) {
                                         //echo "<th>Password</th>";
                                         echo "<th>Creation Date</th>";
                                         echo "<th>Action</th>";
+                                        echo "<th>Role</th>";
                                     echo "</tr>";
                                 echo "</thead>";
                                 echo "<tbody>";
                                 while($row = mysqli_fetch_array($result)){
                                     echo "<tr>";
                                         echo "<td>" . $row['user_id'] . "</td>";
-                                        echo "<td>" . $row['username'] . "</td>";
-                                        //echo "<td>" . $row['password'] . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['username'], ENT_XHTML | ENT_QUOTES) . "</td>";
+                                    
                                         echo "<td>" . $row['creation_date'] . "</td>";
                                         echo "<td>";
-                                            //echo "<a href='read.php?id=". $row['user_id'] ."' title='View Account' data-toggle='tooltip'><span class='glyphicon glyphicon-eye-open'></span></a>";
+                                                                                echo "<td>" . $row['role'] . "</td>";
+                                        echo "<td>";
                                             echo "<a href='update.php?id=". $row['user_id'] ."' title='Update Account' data-toggle='tooltip'><span class='glyphicon glyphicon-pencil'></span></a>";
                                             echo "<a href='delete.php?id=". $row['user_id'] ."' title='Delete Account' data-toggle='tooltip'><span class='glyphicon glyphicon-trash'></span></a>";
                                         echo "</td>";
