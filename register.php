@@ -9,10 +9,26 @@ $username_err = $password_err = $confirm_password_err = "";
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
  
+    $recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
+    $recaptcha_secret = '6LcUZf8ZAAAAAPW7vjKH0UWjhw0HojPw6e6OCO7Q';
+    $recaptcha_response = $_POST['recaptcha_response'];
+
+    $recaptcha = file_get_contents($recaptcha_url . '?secret=' .            $recaptcha_secret . '&response=' . $recaptcha_response);
+    $recaptcha = json_decode($recaptcha);
+
+    // Take action based on the score returned:
+    if ($recaptcha->score < 0.5) {
+        die("Bot!");
+    }
+
     // Validate username
     if(empty(trim($_POST["username"]))){
         $username_err = "Please enter a username.";
-    } else{
+    }
+    elseif (strlen(trim($_POST["username"])) != strlen(htmlspecialchars(trim($_POST["username"]),ENT_QUOTES, 'UTF-8'))){
+      $username_err = "That is not an accepted username.";
+    }
+     else{
         // Prepare a select statement
         $sql = "SELECT user_id FROM user WHERE username = ?";
         
@@ -98,6 +114,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <head>
     <meta charset="UTF-8">
     <title>Sign Up</title>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LcUZf8ZAAAAAIP3gKVzFmRJrtmTQySuqrevbSBM"></script>
+      <script>
+        grecaptcha.ready(function () {
+            grecaptcha.execute('6LcUZf8ZAAAAAIP3gKVzFmRJrtmTQySuqrevbSBM', { action: 'register' }).then(function (token) {
+                var recaptchaResponse = document.getElementById('recaptchaResponse');
+                recaptchaResponse.value = token;
+            });
+        });
+    </script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
     <style type="text/css">
         body
@@ -117,7 +142,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <div class="wrapper">
         <h2>Sign Up</h2>
         <p>Please fill this form to create an account.</p>
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+        <form id="comment_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
                 <label>Username</label>
                 <input type="text" name="username" class="form-control" value="<?php echo $username; ?>">
@@ -133,12 +158,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <input type="password" name="confirm_password" class="form-control" value="<?php echo $confirm_password; ?>">
                 <span class="help-block"><?php echo $confirm_password_err; ?></span>
             </div>
+            <script>
+                    function onSubmit(token)
+                    {
+                    document.getElementById("demo-form").submit();
+                    }
+            </script>
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Submit">
                 <input type="reset" class="btn btn-default" value="Reset">
             </div>
+            <input type="hidden" name="recaptcha_response" id="recaptchaResponse">
             <p>Already have an account? <a href="login.php">Login here</a>.</p>
         </form>
+        
     </div> 
 	<footer>
 <?php
