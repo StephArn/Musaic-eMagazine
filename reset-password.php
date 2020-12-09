@@ -1,13 +1,15 @@
 <?php
 // Initialize the session
 session_start();
- 
+require_once "token.php";
 // Check if the user is logged in, otherwise redirect to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
     exit;
 }
- 
+if($_SESSION['agent'] != $_SERVER['HTTP_USER_AGENT']) {
+    die('Session MAY have been hijacked');
+}
 // Include config file
 require_once "config.php";
  
@@ -36,9 +38,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $confirm_password_err = "Password did not match.";
         }
     }
-        
+    $csrf_token = $_POST['csrf_token'];  
     // Check input errors before updating the database
     if(empty($new_password_err) && empty($confirm_password_err)){
+         if(!Token::check_token($csrf_token))
+		{
+          die('Invalid token.');
+        }
         // Prepare an update statement
         $sql = "UPDATE user SET password = ? WHERE user_id = ?";
         
@@ -76,6 +82,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <meta charset="UTF-8">
     <title>Reset Password</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.0/additional-methods.min.js"></script>
+
     <style type="text/css">
         body{ font: 14px sans-serif; }
         .wrapper{ width: 350px; padding: 20px; }
@@ -99,11 +111,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             <div class="form-group <?php echo (!empty($confirm_password_err)) ? 'has-error' : ''; ?>">
                 <label>Confirm Password</label>
                 <input type="password" name="confirm_password" class="form-control">
+
                 <span class="help-block"><?php echo $confirm_password_err; ?></span>
             </div>
+            <div>
+<input id="login-username" type="hidden" class="form-control" name="csrf_token" value="<?php  echo $_SESSION["token"];  ?>">  
+</div>
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Submit">
-                <a class="btn btn-link" href="welcome.php">Cancel</a>
+                <a class="btn btn-link" href="home.php">Cancel</a>
             </div>
         </form>
     </div>
