@@ -1,12 +1,21 @@
 <?php
 // Initialize the session
 session_start();
- 
+require_once "token.php";
+
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-  header("location: home-logged.php");
+     if ($_SESSION["role"] == "basic")
+        header("location: home-logged_b.php");
+    elseif ($_SESSION["role"] == "amateur")
+        header("location: home-logged_a.php");
+                            elseif ($_SESSION["role"] == "pro")
+                            header("location: home-logged_p.php");
+                            elseif ($_SESSION["role"] == "mod")
+                            header("location: home-logged_m.php");
   exit;
 }
+
  
 // Include config file
 require_once "config.php";
@@ -61,10 +70,29 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             // Store data in session variables
                             $_SESSION["loggedin"] = true;
                             $_SESSION["user_id"] = $id;
-                            $_SESSION["username"] = $username;                            
+                            $_SESSION["username"] = $username; 
+                            $token = Token::generate_token(session_id());
+			                setcookie("id", session_id());
+			                setcookie("token", $token);
+
+                            $r_query = "SELECT role FROM user WHERE user_id = ".$id;  
+                            $role = mysqli_query($link, $r_query);
+
+                              
+                            $row = $role->fetch_assoc();
+                            $role= $row['role'];   
+                            $_SESSION["role"] = $role;            
                             
                             // Redirect user to welcome page
-                            header("location: home-logged.php");
+                            if ($role == "basic")
+                            header("location: home-logged_b.php");
+                            elseif ($role == "amateur")
+                            header("location: home-logged_a.php");
+                            elseif ($role == "pro")
+                            header("location: home-logged_p.php");
+                            elseif ($role == "mod")
+                            header("location: home-logged_m.php");
+                            
                         } else{
                             // Display an error message if password is not valid
                             $password_err = "The password you entered was not valid.";
@@ -85,6 +113,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     
     // Close connection
     mysqli_close($link);
+    $_SESSION['agent'] = $_SERVER['HTTP_USER_AGENT'];
 }
 ?>
  
@@ -94,6 +123,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <meta charset="UTF-8">
     <title>Login</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="css/testlogin.css" rel="stylesheet">
+<link rel="stylesheet" href="https://jqueryvalidation.org/files/demo/site-demos.css">
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.0/additional-methods.min.js"></script>
+
     <style type="text/css">
         body{ font: 14px sans-serif; text-align: center;	}
         .wrapper{ padding-top: 100px; padding-bottom: 100px; padding-left: 300px; padding-right: 300px; }
